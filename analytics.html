@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - First Job Rejection Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="analytics.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Analytics Dashboard</h1>
+        <p>Deep insights into your job search journey</p>
+        <nav>
+            <a href="index.html" class="btn secondary">
+                <i class="fas fa-arrow-left"></i> Back to Tracker
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="analytics-grid">
+            <!-- Key Metrics -->
+            <div class="metric-card">
+                <h3>Success Rate</h3>
+                <div class="metric-value" id="success-rate">0%</div>
+                <p>Offers / Total Applications</p>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Interview Rate</h3>
+                <div class="metric-value" id="interview-rate">0%</div>
+                <p>Interviews / Total Applications</p>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Average Time to Offer</h3>
+                <div class="metric-value" id="avg-time-to-offer">0 days</div>
+                <p>From application to offer</p>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Most Active Month</h3>
+                <div class="metric-value" id="most-active-month">-</div>
+                <p>Highest application volume</p>
+            </div>
+
+            <!-- Charts -->
+            <div class="chart-container">
+                <h3>Application Timeline</h3>
+                <canvas id="timeline-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Stage Distribution</h3>
+                <canvas id="stage-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Top Companies Applied</h3>
+                <canvas id="company-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Application Sources</h3>
+                <canvas id="source-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Weekly Activity</h3>
+                <canvas id="weekly-chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Success Timeline</h3>
+                <canvas id="success-timeline-chart"></canvas>
+            </div>
+
+            <!-- Detailed Insights -->
+            <div class="insights-container">
+                <h3>Detailed Insights</h3>
+                <div id="insights-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* Analytics Dashboard Styles */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.metric-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-card h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.chart-container h3 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.chart-container canvas {
+    max-height: 400px;
+}
+
+.insights-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    grid-column: 1 / -1;
+}
+
+.insights-container h3 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+}
+
+.insight-item {
+    background: #f8f9ff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.insight-item h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.insight-item p {
+    color: #666;
+    margin: 0;
+}
+
+.insight-positive {
+    border-left-color: #4caf50;
+}
+
+.insight-negative {
+    border-left-color: #f44336;
+}
+
+.insight-neutral {
+    border-left-color: #ff9800;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Navigation styles */
+nav {
+    margin-top: 1rem;
+}
+
+nav .btn {
+    margin: 0.5rem;
+}
+
+/* Loading state */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

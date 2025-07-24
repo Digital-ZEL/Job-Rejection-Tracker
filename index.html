@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Job Tracker - Complete Job Application Management</title>
+    <link rel="stylesheet" href="unified-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-briefcase"></i>
+                <span>Smart Job Tracker</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-page="analytics">Analytics</a></li>
+                <li><a href="#" class="nav-link" data-page="resume-builder">Resume Builder</a></li>
+                <li><a href="#" class="nav-link" data-page="pricing">Pricing</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Page -->
+    <div id="dashboard-page" class="page-content">
+        <header class="page-header">
+            <h1>Job Application Dashboard</h1>
+            <p>Track your applications and stay organized</p>
+        </header>
+
+        <!-- Metrics Bar -->
+        <div class="metrics-bar">
+            <div class="metric">
+                <h3 id="total-applications">0</h3>
+                <p>Total Applications</p>
+            </div>
+            <div class="metric">
+                <h3 id="interviews">0</h3>
+                <p>Interviews</p>
+            </div>
+            <div class="metric">
+                <h3 id="offers">0</h3>
+                <p>Offers</p>
+            </div>
+            <div class="metric">
+                <h3 id="rejections">0</h3>
+                <p>Rejections</p>
+            </div>
+            <div class="metric">
+                <h3 id="ghosted">0</h3>
+                <p>Ghosted</p>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="add-application-btn" class="btn primary">
+                <i class="fas fa-plus"></i> Add Application
+            </button>
+            <button id="smart-paste-btn" class="btn secondary">
+                <i class="fas fa-paste"></i> Smart Paste
+            </button>
+            <button id="export-data-btn" class="btn secondary">
+                <i class="fas fa-download"></i> Export Data
+            </button>
+        </div>
+
+        <!-- Application Board -->
+        <div class="board-container">
+            <div class="board-column" data-stage="applied">
+                <h3>Applied</h3>
+                <div class="applications-list" id="applied-list"></div>
+            </div>
+            <div class="board-column" data-stage="interview">
+                <h3>Interview</h3>
+                <div class="applications-list" id="interview-list"></div>
+            </div>
+            <div class="board-column" data-stage="offer">
+                <h3>Offer</h3>
+                <div class="applications-list" id="offer-list"></div>
+            </div>
+            <div class="board-column" data-stage="rejected">
+                <h3>Rejected</h3>
+                <div class="applications-list" id="rejected-list"></div>
+            </div>
+            <div class="board-column" data-stage="ghosted">
+                <h3>Ghosted</h3>
+                <div class="applications-list" id="ghosted-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Page -->
+    <div id="analytics-page" class="page-content" style="display: none;">
+        <header class="page-header">
+            <h1>Analytics Dashboard</h1>
+            <p>Track your job search progress</p>
+        </header>
+
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <h3>Total Applications</h3>
+                <p class="analytics-number" id="analytics-total">0</p>
+            </div>
+            <div class="analytics-card">
+                <h3>Interviews</h3>
+                <p class="analytics-number" id="analytics-interviews">0</p>
+            </div>
+            <div class="analytics-card">
+                <h3>Offers</h3>
+                <p class="analytics-number" id="analytics-offers">0</p>
+            </div>
+            <div class="analytics-card">
+                <h3>Success Rate</h3>
+                <p class="analytics-number" id="success-rate">0%</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Application Distribution</h3>
+            <canvas id="applications-chart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Resume Builder Page -->
+    <div id="resume-builder-page" class="page-content" style="display: none;">
+        <header class="page-header">
+            <h1>Resume Builder</h1>
+            <p>Create your professional resume</p>
+        </header>
+
+        <div class="resume-builder">
+            <div class="resume-template">
+                <h2>Professional Resume</h2>
+                <div class="resume-section">
+                    <h3>Experience</h3>
+                    <div id="resume-experience">
+                        <p>Your job applications will appear here as experience.</p>
+                    </div>
+                </div>
+                <div class="resume-section">
+                    <h3>Skills</h3>
+                    <div class="skills-list">
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Page -->
+    <div id="pricing-page" class="page-content" style="display: none;">
+        <header class="page-header">
+            <h1>Pricing Plans</h1>
+            <p>Choose the plan that works for you</p>
+        </header>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Free</h3>
+                <div class="price">$0/month</div>
+                <ul>
+                    <li>Track unlimited applications</li>
+                    <li>Basic analytics</li>
+                    <li>Export data</li>
+                    <li>Mobile responsive</li>
+                </ul>
+                <button class="btn primary">Get Started</button>
+            </div>
+            <div class="pricing-card featured">
+                <h3>Pro</h3>
+                <div class="price">$9/month</div>
+                <ul>
+                    <li>Everything in Free</li>
+                    <li>Advanced analytics</li>
+                    <li>Resume builder</li>
+                    <li>Interview scheduler</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="btn primary">Upgrade Now</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">$29/month</div>
+                <ul>
+                    <li>Everything in Pro</li>
+                    <li>Team collaboration</li>
+                    <li>Custom integrations</li>
+                    <li>Advanced reporting</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <button class="btn primary">Contact Sales</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Application Modal -->
+    <div id="application-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Add New Application</h2>
+            <form id="application-form">
+                <input type="hidden" id="application-id">
+                <div class="form-group">
+                    <label for="company">Company *</label>
+                    <input type="text" id="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role *</label>
+                    <input type="text" id="role" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location">
+                </div>
+                <div class="form-group">
+                    <label for="source">Source</label>
+                    <input type="text" id="source" placeholder="LinkedIn, Indeed, etc.">
+                </div>
+                <div class="form-group">
+                    <label for="stage">Stage *</label>
+                    <select id="stage" required>
+                        <option value="applied">Applied</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="ghosted">Ghosted</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">Save</button>
+                    <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Smart Paste Modal -->
+    <div id="smart-paste-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSmartPasteModal()">&times;</span>
+            <h2>Smart Paste Job Application</h2>
+            <p>Paste a job posting URL to auto-fill the application details</p>
+            <div class="form-group">
+                <label for="smart-paste-url">Job Posting URL</label>
+                <input type="url" id="smart-paste-url" placeholder="https://linkedin.com/jobs/view/12345">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn primary" onclick="processSmartPaste()">Process URL</button>
+                <button type="button" class="btn secondary" onclick="closeSmartPasteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="unified-app.js"></script>
+</body>
+</html>
