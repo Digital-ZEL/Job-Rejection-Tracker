@@ -29,6 +29,12 @@
             border: 1px solid #d32f2f;
             color: #d32f2f;
         }
+        .test-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -36,31 +42,89 @@
         <h1>Modularization Test</h1>
         <p>Testing the new modular frontend structure...</p>
         
-        <div id="test-results"></div>
+        <div class="test-section">
+            <h2>Module Loading Test</h2>
+            <div id="module-test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Functionality Test</h2>
+            <div id="functionality-test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Integration Test</h2>
+            <div id="integration-test-results"></div>
+        </div>
     </div>
 
     <script type="module">
         try {
-            // Test importing the main app module
-            import('./src/app.js').then(() => {
-                const results = document.getElementById('test-results');
+            // Test 1: Module loading
+            const moduleResults = document.getElementById('module-test-results');
+            
+            Promise.all([
+                import('./src/app.js'),
+                import('./src/modules/application-manager.js'),
+                import('./src/modules/analytics.js'),
+                import('./src/modules/navigation.js'),
+                import('./src/modules/smart-paste.js'),
+                import('./src/modules/export.js')
+            ]).then(() => {
                 const successDiv = document.createElement('div');
                 successDiv.className = 'test-result success';
-                successDiv.innerHTML = '<h3>✅ Module Loading Success</h3><p>Frontend modules loaded correctly!</p>';
-                results.appendChild(successDiv);
+                successDiv.innerHTML = '<h3>✅ All Modules Loaded Successfully</h3><p>Frontend modules imported without errors!</p>';
+                moduleResults.appendChild(successDiv);
+                
+                // Test 2: Functionality
+                testFunctionality();
             }).catch(error => {
-                const results = document.getElementById('test-results');
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'test-result error';
                 errorDiv.innerHTML = `<h3>❌ Module Loading Error</h3><p>${error.message}</p>`;
-                results.appendChild(errorDiv);
+                moduleResults.appendChild(errorDiv);
             });
+            
+            // Test functionality
+            function testFunctionality() {
+                const functionalityResults = document.getElementById('functionality-test-results');
+                
+                try {
+                    // Test basic functions exist
+                    import('./src/app.js').then(appModule => {
+                        const requiredExports = [
+                            'applications', 'renderApplications', 'updateMetrics', 'loadAnalytics',
+                            'navigateTo', 'openModal', 'closeModal', 'handleSubmit'
+                        ];
+                        
+                        const missingExports = requiredExports.filter(exp => !(exp in appModule) && typeof appModule[exp] === 'undefined');
+                        
+                        if (missingExports.length === 0) {
+                            const successDiv = document.createElement('div');
+                            successDiv.className = 'test-result success';
+                            successDiv.innerHTML = '<h3>✅ Core Functions Available</h3><p>All required functions are properly exported!</p>';
+                            functionalityResults.appendChild(successDiv);
+                        } else {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'test-result error';
+                            errorDiv.innerHTML = `<h3>❌ Missing Exports</h3><p>Missing: ${missingExports.join(', ')}</p>`;
+                            functionalityResults.appendChild(errorDiv);
+                        }
+                    });
+                } catch (error) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'test-result error';
+                    errorDiv.innerHTML = `<h3>❌ Functionality Test Error</h3><p>${error.message}</p>`;
+                    functionalityResults.appendChild(errorDiv);
+                }
+            }
+            
         } catch (error) {
-            const results = document.getElementById('test-results');
+            const moduleResults = document.getElementById('module-test-results');
             const errorDiv = document.createElement('div');
             errorDiv.className = 'test-result error';
             errorDiv.innerHTML = `<h3>❌ Test Setup Error</h3><p>${error.message}</p>`;
-            results.appendChild(errorDiv);
+            moduleResults.appendChild(errorDiv);
         }
     </script>
 </body>

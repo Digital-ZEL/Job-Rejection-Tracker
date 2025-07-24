@@ -3,6 +3,7 @@
  */
 
 import { navigateTo } from '../modules/navigation.js';
+import { loadAnalytics, loadResumeBuilder } from '../modules/analytics.js';
 
 // Mock DOM elements
 const mockPages = {
@@ -36,8 +37,8 @@ document.getElementById = jest.fn().mockImplementation((id) => {
 });
 
 // Mock load functions
-global.loadAnalytics = jest.fn();
-global.loadResumeBuilder = jest.fn();
+global.loadAnalytics = loadAnalytics;
+global.loadResumeBuilder = loadResumeBuilder;
 
 describe('Navigation Module', () => {
   beforeEach(() => {

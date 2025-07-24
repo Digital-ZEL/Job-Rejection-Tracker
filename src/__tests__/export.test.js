@@ -3,6 +3,7 @@
  */
 
 import { exportData } from '../modules/export.js';
+import { applications } from '../app.js';
 
 // Mock localStorage
 const localStorageMock = {

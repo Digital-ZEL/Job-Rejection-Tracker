@@ -7,7 +7,7 @@ import { renderApplications, updateMetrics, openModal, closeModal, handleSubmit,
 import { navigateTo } from './modules/navigation.js';
 import { showSmartPasteModal, closeSmartPasteModal, processSmartPaste } from './modules/smart-paste.js';
 import { exportData } from './modules/export.js';
-import { loadAnalytics } from './modules/analytics.js';
+import { loadAnalytics, loadResumeBuilder } from './modules/analytics.js';
 
 // DOM Elements
 const modal = document.getElementById('application-modal');
@@ -57,12 +57,40 @@ window.addEventListener('click', (e) => {
     if (e.target === document.getElementById('smart-paste-modal')) closeSmartPasteModal();
 });
 
+// Make global functions available for inline event handlers
+window.closeModal = closeModal;
+window.processSmartPaste = processSmartPaste;
+window.editApplication = (id) => {
+    import('./modules/application-manager.js').then(module => {
+        module.editApplication(id);
+    });
+};
+window.deleteApplication = (id) => {
+    import('./modules/application-manager.js').then(module => {
+        module.deleteApplication(id);
+    });
+};
+
+// Helper functions to access shared state
+export function getEditingId() {
+    return editingId;
+}
+
+export function setEditingId(id) {
+    editingId = id;
+}
+
+export function getModal() {
+    return modal;
+}
+
+export function getForm() {
+    return form;
+}
+
 // Export functions for use in other modules
 export {
     applications,
-    editingId,
-    modal,
-    form,
     addBtn,
     exportBtn,
     closeBtn,

@@ -1,5 +1,5 @@
 // Application Management Module
-import { applications, renderApplications, updateMetrics, loadAnalytics } from '../app.js';
+import { applications, getEditingId, setEditingId, getModal, getForm } from '../app.js';
 
 // Enhanced Application Management
 function renderApplications() {
@@ -58,6 +58,7 @@ function createApplicationCard(app) {
 function handleSubmit(e) {
     e.preventDefault();
     
+    const editingId = getEditingId();
     const application = {
         id: editingId || Date.now().toString(),
         company: document.getElementById('company').value,
@@ -100,7 +101,10 @@ function updateMetrics() {
 
 // Modal functions
 function openModal(id = null) {
-    editingId = id;
+    const editingId = getEditingId();
+    setEditingId(id);
+    const modal = getModal();
+    const form = getForm();
     const modalTitle = document.getElementById('modal-title');
     
     if (id) {
@@ -122,9 +126,11 @@ function openModal(id = null) {
 }
 
 function closeModal() {
+    const modal = getModal();
+    const form = getForm();
     modal.style.display = 'none';
     form.reset();
-    editingId = null;
+    setEditingId(null);
 }
 
 // Drag and drop
@@ -160,6 +166,21 @@ function handleDrop(e) {
     
     draggedElement.style.opacity = '';
     draggedElement = null;
+}
+
+// Edit and Delete functions
+function editApplication(id) {
+    openModal(id);
+}
+
+function deleteApplication(id) {
+    if (confirm('Are you sure you want to delete this application?')) {
+        applications = applications.filter(app => app.id !== id);
+        localStorage.setItem('jobApplications', JSON.stringify(applications));
+        renderApplications();
+        updateMetrics();
+        loadAnalytics();
+    }
 }
 
 // Add demo data
@@ -214,5 +235,7 @@ export {
     handleDragStart,
     handleDragOver,
     handleDrop,
+    editApplication,
+    deleteApplication,
     addDemoData
 };

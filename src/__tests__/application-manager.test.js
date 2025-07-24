@@ -3,6 +3,7 @@
  */
 
 import { renderApplications, createApplicationCard, updateMetrics, addDemoData } from '../modules/application-manager.js';
+import { applications } from '../app.js';
 
 // Mock localStorage
 const localStorageMock = {

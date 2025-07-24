@@ -3,6 +3,7 @@
  */
 
 import { loadAnalytics, getStageColor, loadResumeBuilder } from '../modules/analytics.js';
+import { applications } from '../app.js';
 
 // Mock localStorage
 const localStorageMock = {
