@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modularization Test</title>
+    <link rel="stylesheet" href="unified-styles.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .test-result {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        .success {
+            background: #e8f5e8;
+            border: 1px solid #388e3c;
+            color: #388e3c;
+        }
+        .error {
+            background: #ffebee;
+            border: 1px solid #d32f2f;
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Modularization Test</h1>
+        <p>Testing the new modular frontend structure...</p>
+        
+        <div id="test-results"></div>
+    </div>
+
+    <script type="module">
+        try {
+            // Test importing the main app module
+            import('./src/app.js').then(() => {
+                const results = document.getElementById('test-results');
+                const successDiv = document.createElement('div');
+                successDiv.className = 'test-result success';
+                successDiv.innerHTML = '<h3>✅ Module Loading Success</h3><p>Frontend modules loaded correctly!</p>';
+                results.appendChild(successDiv);
+            }).catch(error => {
+                const results = document.getElementById('test-results');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'test-result error';
+                errorDiv.innerHTML = `<h3>❌ Module Loading Error</h3><p>${error.message}</p>`;
+                results.appendChild(errorDiv);
+            });
+        } catch (error) {
+            const results = document.getElementById('test-results');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'test-result error';
+            errorDiv.innerHTML = `<h3>❌ Test Setup Error</h3><p>${error.message}</p>`;
+            results.appendChild(errorDiv);
+        }
+    </script>
+</body>
+</html>

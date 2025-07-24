@@ -1,5 +1,33 @@
 # First Job Rejection Tracker - Complete Full-Stack Application
 
+## 🏗️ Modern Architecture
+
+This application has been upgraded to use a modern modular architecture with comprehensive testing:
+
+### Frontend Structure
+```
+src/
+├── main.js                 # Entry point
+├── app.js                  # Main application state and initialization
+└── modules/
+    ├── application-manager.js  # Application CRUD operations
+    ├── analytics.js           # Analytics and resume builder
+    ├── navigation.js          # Page navigation
+    ├── smart-paste.js         # URL parsing and smart paste
+    └── export.js              # Data export functionality
+```
+
+### Testing
+```
+src/
+└── __tests__/
+    ├── application-manager.test.js
+    ├── analytics.test.js
+    ├── smart-paste.test.js
+    ├── export.test.js
+    └── navigation.test.js
+```
+
 A comprehensive job application tracking system with both frontend and backend components, designed for new graduates to stay organized and motivated during their job search.
 
 ## 🚀 Features
@@ -27,6 +55,21 @@ A comprehensive job application tracking system with both frontend and backend c
 1. Simply open `index.html` in your web browser
 2. Start tracking applications immediately
 3. All data is stored in browser's localStorage
+
+### Development Setup
+1. **Install Node.js** - Download from https://nodejs.org/
+2. **Install frontend dependencies:**
+```bash
+npm install
+```
+3. **Run tests:**
+```bash
+npm test
+```
+4. **Run tests with coverage:**
+```bash
+npm run test:coverage
+```
 
 ### Backend (Optional - for full features)
 1. **Install Node.js** - Download from https://nodejs.org/
