@@ -828,12 +828,18 @@ function updateMetrics() {
     document.getElementById('ghosted').textContent = ghosted;
 }
 
-// Close modals
+// Close modals when clicking outside (on backdrop)
 window.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-    if (e.target === document.getElementById('smart-paste-modal')) closeSmartPasteModal();
-    if (e.target === document.getElementById('auth-modal')) closeAuthModal();
-    if (e.target === document.getElementById('upgrade-modal')) closeUpgradeModal();
+    // Check if the clicked element is a modal backdrop
+    if (e.target.classList.contains('modal') && e.target.id) {
+        // Close the specific modal
+        if (e.target.id === 'application-modal') closeModal();
+        else if (e.target.id === 'smart-paste-modal') closeSmartPasteModal();
+        else if (e.target.id === 'auth-modal') closeAuthModal();
+        else if (e.target.id === 'upgrade-modal') closeUpgradeModal();
+        else if (e.target.id === 'payment-modal') closePaymentModal();
+        else if (e.target.id === 'notification-modal') closeNotificationModal();
+    }
 });
 
 // Add demo data
@@ -1323,17 +1329,11 @@ function checkApplicationLimit() {
 }
 
 function showUpgradeModal() {
-    const modal = document.getElementById('upgrade-modal');
-    if (modal) {
-        modal.style.display = 'block';
-    }
+    openModal('upgrade-modal');
 }
 
 function closeUpgradeModal() {
-    const modal = document.getElementById('upgrade-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    closeModal('upgrade-modal');
 }
 
 // ==========================================
@@ -1444,17 +1444,11 @@ function toggleDarkMode() {
 
 // 3. PAYMENT FUNCTIONS
 function showPaymentModal() {
-    const modal = document.getElementById('payment-modal');
-    if (modal) {
-        modal.style.display = 'block';
-    }
+    openModal('payment-modal');
 }
 
 function closePaymentModal() {
-    const modal = document.getElementById('payment-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    closeModal('payment-modal');
 }
 
 function handlePayment(e) {
@@ -1499,18 +1493,12 @@ function handlePayment(e) {
 
 // 4. NOTIFICATION FUNCTIONS
 function showNotificationModal() {
-    const modal = document.getElementById('notification-modal');
-    if (modal) {
-        modal.style.display = 'block';
-        loadNotificationSettings();
-    }
+    openModal('notification-modal');
+    loadNotificationSettings();
 }
 
 function closeNotificationModal() {
-    const modal = document.getElementById('notification-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    closeModal('notification-modal');
 }
 
 function loadNotificationSettings() {
@@ -1941,13 +1929,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.querySelector('.controls')?.appendChild(demoBtn);
         }, 600);
     }
-    
-    // Close modals on click outside
-    window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-            e.target.style.display = 'none';
-        }
-    });
     
     // Check for login/register params
     // Handle URL parameters for deep linking
