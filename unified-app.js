@@ -950,9 +950,9 @@ function handleLogin(e) {
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         closeAuthModal();
         updateAuthUI();
-        alert('Welcome back, ' + user.name + '!');
+        showToast('Welcome back, ' + user.name + '! 👋', 'success');
     } else {
-        alert('Invalid email or password. Please try again or register for a new account.');
+        showToast('Invalid email or password. Please try again.', 'error');
     }
 }
 
@@ -965,7 +965,7 @@ function handleRegister(e) {
     // Check if user already exists
     const users = JSON.parse(localStorage.getItem('users')) || [];
     if (users.find(u => u.email === email)) {
-        alert('An account with this email already exists. Please login instead.');
+        showToast('An account with this email already exists. Please login instead.', 'error');
         showLoginForm();
         return;
     }
@@ -993,7 +993,7 @@ function handleRegister(e) {
     
     closeAuthModal();
     updateAuthUI();
-    alert('Welcome to Job Tracker, ' + name + '! You can track up to 5 applications for free.');
+    showToast('Welcome to Job Tracker, ' + name + '! 🎉 You can track up to 5 applications for free.', 'success');
 }
 
 function handleLogout() {
@@ -1001,15 +1001,15 @@ function handleLogout() {
         currentUser = null;
         localStorage.removeItem('currentUser');
         updateAuthUI();
-        alert('You have been logged out.');
+        showToast('You have been logged out. See you soon! 👋', 'info');
     }
 }
 
 function checkApplicationLimit() {
     // If not logged in, prompt to login
     if (!currentUser) {
-        alert('Please login or create a free account to start tracking applications. Free accounts can track up to 5 applications!');
-        showLoginModal();
+        showToast('Please login or create a free account to start tracking applications! 🚀', 'info');
+        setTimeout(() => showLoginModal(), 500);
         return false;
     }
     
