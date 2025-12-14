@@ -1959,3 +1959,358 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     observer.observe(document.body, { childList: true, subtree: true });
 });
+
+// ==========================================
+// CHAT ASSISTANT
+// ==========================================
+
+let chatPanelOpen = false;
+let pendingParsedJob = null; // Store parsed job for confirmation
+
+// Toggle chat panel visibility
+function toggleChatPanel() {
+    const panel = document.getElementById('chat-panel');
+    const toggleBtn = document.getElementById('chat-toggle-btn');
+    
+    chatPanelOpen = !chatPanelOpen;
+    
+    if (chatPanelOpen) {
+        panel.classList.add('open');
+        toggleBtn.classList.add('hidden');
+        document.getElementById('chat-input').focus();
+    } else {
+        panel.classList.remove('open');
+        toggleBtn.classList.remove('hidden');
+    }
+}
+
+// Handle Enter key in chat input
+function handleChatKeypress(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+    }
+}
+
+// Extract URLs from text
+function extractUrls(text) {
+    return text.match(/https?:\/\/[^\s)>\]]+/g) || [];
+}
+
+// Send a chat message
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage(message, 'user');
+    input.value = '';
+    
+    // Process the message
+    processChatMessage(message);
+}
+
+// Add a message to the chat
+function addChatMessage(content, type, options = {}) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${type}`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = type === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    if (options.isError) {
+        contentDiv.classList.add('message-error');
+    }
+    
+    if (options.isHtml) {
+        contentDiv.innerHTML = content;
+    } else {
+        const p = document.createElement('p');
+        p.textContent = content;
+        contentDiv.appendChild(p);
+    }
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(contentDiv);
+    messagesContainer.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    return messageDiv;
+}
+
+// Show typing indicator
+function showTypingIndicator() {
+    const messagesContainer = document.getElementById('chat-messages');
+    const typing = document.createElement('div');
+    typing.className = 'chat-message assistant';
+    typing.id = 'typing-indicator';
+    typing.innerHTML = `
+        <div class="message-avatar"><i class="fas fa-robot"></i></div>
+        <div class="message-content">
+            <div class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
+    messagesContainer.appendChild(typing);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Hide typing indicator
+function hideTypingIndicator() {
+    const typing = document.getElementById('typing-indicator');
+    if (typing) typing.remove();
+}
+
+// Process chat message
+function processChatMessage(message) {
+    const lowerMessage = message.toLowerCase().trim();
+    
+    // Handle commands
+    if (lowerMessage === 'help') {
+        showHelpMessage();
+        return;
+    }
+    
+    if (lowerMessage === 'status') {
+        showStatusMessage();
+        return;
+    }
+    
+    // Check for URLs
+    const urls = extractUrls(message);
+    
+    if (urls.length > 1) {
+        addChatMessage('I found multiple URLs. Which one would you like me to parse?', 'assistant');
+        urls.forEach((url, index) => {
+            const domain = new URL(url).hostname.replace('www.', '');
+            addChatMessage(`${index + 1}. ${domain}`, 'assistant', {
+                isHtml: true,
+                content: `<p><a href="#" onclick="parseJobUrl('${url}'); return false;">${index + 1}. ${domain}</a></p>`
+            });
+        });
+        return;
+    }
+    
+    if (urls.length === 1) {
+        parseJobFromUrl(urls[0]);
+        return;
+    }
+    
+    // Check for "add" command with URL
+    if (lowerMessage.startsWith('add ')) {
+        const urlPart = message.substring(4).trim();
+        const addUrls = extractUrls(urlPart);
+        if (addUrls.length > 0) {
+            parseJobFromUrl(addUrls[0]);
+            return;
+        }
+    }
+    
+    // No URL found - provide help
+    addChatMessage(
+        "I didn't find a job URL in your message. Paste a job posting link (Greenhouse, Lever, Ashby, etc.) and I'll extract the details for you. Type 'help' for more options.",
+        'assistant'
+    );
+}
+
+// Show help message
+function showHelpMessage() {
+    const helpHtml = `
+        <p><strong>📋 Commands:</strong></p>
+        <p>• <strong>Paste a URL</strong> - Auto-parse job details</p>
+        <p>• <strong>add [url]</strong> - Same as pasting a URL</p>
+        <p>• <strong>status</strong> - See your application stats</p>
+        <p>• <strong>help</strong> - Show this message</p>
+        <p class="message-hint" style="margin-top: 12px;">Supported sites: Greenhouse, Lever, Ashby, Workday, and most company career pages</p>
+    `;
+    addChatMessage(helpHtml, 'assistant', { isHtml: true });
+}
+
+// Show status message
+function showStatusMessage() {
+    const total = applications.length;
+    const interviews = applications.filter(a => a.stage?.toLowerCase() === 'interview').length;
+    const offers = applications.filter(a => a.stage?.toLowerCase() === 'offer').length;
+    const rejections = applications.filter(a => a.stage?.toLowerCase() === 'rejected').length;
+    
+    const statusHtml = `
+        <p><strong>📊 Your Job Search Stats:</strong></p>
+        <p>• Total Applications: <strong>${total}</strong></p>
+        <p>• Interviews: <strong>${interviews}</strong></p>
+        <p>• Offers: <strong>${offers}</strong></p>
+        <p>• Rejections: <strong>${rejections}</strong></p>
+        ${total > 0 ? `<p class="message-hint">Interview rate: ${Math.round((interviews / total) * 100)}%</p>` : ''}
+    `;
+    addChatMessage(statusHtml, 'assistant', { isHtml: true });
+}
+
+// Parse job from URL (calls Netlify function)
+async function parseJobFromUrl(url) {
+    showTypingIndicator();
+    addChatMessage(`Parsing job post...`, 'assistant');
+    
+    try {
+        const response = await fetch('/.netlify/functions/parse-job', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        
+        hideTypingIndicator();
+        
+        if (!response.ok) {
+            throw new Error('Failed to parse job posting');
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            showParseError(url, data.error);
+            return;
+        }
+        
+        // Store parsed job for confirmation
+        pendingParsedJob = {
+            ...data,
+            jobUrl: url,
+            source: new URL(url).hostname.replace('www.', '')
+        };
+        
+        // Show parsed job card
+        showParsedJobCard(pendingParsedJob);
+        
+    } catch (error) {
+        hideTypingIndicator();
+        console.error('Parse error:', error);
+        showParseError(url, error.message);
+    }
+}
+
+// Show parse error
+function showParseError(url, errorMessage) {
+    const domain = new URL(url).hostname.replace('www.', '');
+    const errorHtml = `
+        <p>⚠️ Couldn't parse the job from <strong>${domain}</strong></p>
+        <p class="message-hint">${errorMessage || 'The site may be blocking automated access.'}</p>
+        <p style="margin-top: 8px;">Try copying the job details manually and using the <strong>Add Application</strong> button.</p>
+    `;
+    addChatMessage(errorHtml, 'assistant', { isHtml: true, isError: true });
+}
+
+// Show parsed job card with confirmation buttons
+function showParsedJobCard(job) {
+    const cardHtml = `
+        <p>✅ Found this job:</p>
+        <div class="parsed-job-card">
+            <h4>${job.title || 'Unknown Position'}</h4>
+            <div class="company">${job.company || 'Unknown Company'}</div>
+            <div class="details">
+                ${job.location ? `<span class="detail-tag"><i class="fas fa-map-marker-alt"></i> ${job.location}</span>` : ''}
+                ${job.salary ? `<span class="detail-tag"><i class="fas fa-dollar-sign"></i> ${job.salary}</span>` : ''}
+                <span class="detail-tag"><i class="fas fa-globe"></i> ${job.source}</span>
+            </div>
+            <div class="actions">
+                <button class="btn primary" onclick="createApplicationFromChat()">
+                    <i class="fas fa-plus"></i> Create Application
+                </button>
+                <button class="btn secondary" onclick="editBeforeSaving()">
+                    <i class="fas fa-edit"></i> Edit First
+                </button>
+            </div>
+        </div>
+    `;
+    addChatMessage(cardHtml, 'assistant', { isHtml: true });
+}
+
+// Create application from parsed job
+function createApplicationFromChat() {
+    if (!pendingParsedJob) {
+        addChatMessage('No job to save. Please paste a new job URL.', 'assistant');
+        return;
+    }
+    
+    // Check free tier limit
+    if (!currentUser?.plan || currentUser.plan === 'free') {
+        if (applications.length >= FREE_TIER_LIMIT) {
+            showUpgradeModal();
+            addChatMessage('You\'ve reached the free tier limit. Upgrade to add more applications!', 'assistant');
+            return;
+        }
+    }
+    
+    const application = {
+        id: Date.now().toString(),
+        company: pendingParsedJob.company || 'Unknown Company',
+        role: pendingParsedJob.title || 'Unknown Position',
+        location: pendingParsedJob.location || '',
+        source: pendingParsedJob.source || '',
+        stage: 'applied',
+        notes: pendingParsedJob.description || '',
+        salary: pendingParsedJob.salary || '',
+        dateApplied: new Date().toISOString().split('T')[0],
+        jobUrl: pendingParsedJob.jobUrl || ''
+    };
+    
+    // Add to applications
+    applications.push(application);
+    localStorage.setItem('jobApplications', JSON.stringify(applications));
+    
+    // Sync to backend if authenticated
+    if (authToken) {
+        syncApplicationToBackend(application).catch(err => console.error('Backend sync failed:', err));
+    }
+    
+    // Update UI
+    renderApplications();
+    updateMetrics();
+    updateUsageIndicator();
+    
+    // Success message
+    addChatMessage(
+        `✅ Created application for <strong>${application.company}</strong> - <strong>${application.role}</strong>!`,
+        'assistant',
+        { isHtml: true }
+    );
+    
+    // Clear pending job
+    pendingParsedJob = null;
+    
+    // Show confetti for fun
+    if (typeof createConfetti === 'function') {
+        createConfetti();
+    }
+}
+
+// Edit job before saving (opens modal with prefilled data)
+function editBeforeSaving() {
+    if (!pendingParsedJob) {
+        addChatMessage('No job to edit. Please paste a new job URL.', 'assistant');
+        return;
+    }
+    
+    // Prefill the application modal
+    document.getElementById('company').value = pendingParsedJob.company || '';
+    document.getElementById('role').value = pendingParsedJob.title || '';
+    document.getElementById('location').value = pendingParsedJob.location || '';
+    document.getElementById('source').value = pendingParsedJob.source || '';
+    document.getElementById('notes').value = pendingParsedJob.description || '';
+    document.getElementById('stage').value = 'applied';
+    
+    // Open modal
+    openModal('application-modal');
+    
+    // Clear pending job
+    pendingParsedJob = null;
+    
+    addChatMessage('Opened the form with the job details. Make any changes and save!', 'assistant');
+}

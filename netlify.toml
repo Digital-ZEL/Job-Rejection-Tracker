@@ -2,6 +2,11 @@
 [build]
   # No build command needed - static site
   publish = "."
+  functions = "netlify/functions"
+
+# Functions configuration
+[functions]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/app"

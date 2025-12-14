@@ -652,6 +652,41 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Chat Assistant Toggle Button -->
+    <button id="chat-toggle-btn" class="chat-toggle-btn" onclick="toggleChatPanel()" title="Chat Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- Chat Assistant Panel -->
+    <div id="chat-panel" class="chat-panel">
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <i class="fas fa-robot"></i>
+                <span>Job Assistant</span>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChatPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message assistant">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <p>Hi! 👋 I'm your Job Assistant. Paste a job posting URL and I'll auto-fill the details for you.</p>
+                    <p class="message-hint">Try: Greenhouse, Lever, Ashby, or company career pages</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Paste a job URL or type 'help'..." onkeypress="handleChatKeypress(event)">
+            <button id="chat-send-btn" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script src="/unified-app.js"></script>
     <script>
         // Initialize application when page loads
