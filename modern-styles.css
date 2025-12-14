@@ -1,0 +1,375 @@
+/* ==========================================
+   APPLE-STYLE DESIGN SYSTEM 2025
+   "State of the Art" - Clean, Fluid, Premium
+   ========================================== */
+
+:root {
+    /* Apple System Colors */
+    --system-blue: #007AFF;
+    --system-gray: #8E8E93;
+    --system-gray2: #AEAEB2;
+    --system-gray3: #C7C7CC;
+    --system-gray4: #D1D1D6;
+    --system-gray5: #E5E5EA;
+    --system-gray6: #F2F2F7;
+    
+    /* Semantic Colors */
+    --accent: #007AFF;
+    --success: #34C759;
+    --warning: #FF9500;
+    --error: #FF3B30;
+    
+    /* Materials (Light Mode) */
+    --material-regular: rgba(255, 255, 255, 0.72);
+    --material-thick: rgba(255, 255, 255, 0.85);
+    --material-thin: rgba(255, 255, 255, 0.5);
+    
+    /* Shadows (Diffused & Soft) */
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-3: 0 12px 32px rgba(0, 0, 0, 0.12);
+    --shadow-depth: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+    
+    /* Physics Animations (Spring) */
+    --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-apple: cubic-bezier(0.2, 0, 0.2, 1);
+    
+    /* Geometry */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+}
+
+/* ==========================================
+   TYPOGRAPHY - "San Francisco" Style
+   ========================================== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #F5F5F7; /* Apple Off-White Background */
+    color: #1D1D1F;
+    line-height: 1.47059;
+    letter-spacing: -0.022em;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: #1D1D1F;
+}
+
+/* ==========================================
+   NAVIGATION - Glass Bar
+   ========================================== */
+.navbar {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-brand {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1D1D1F !important;
+    letter-spacing: -0.01em;
+}
+
+.nav-brand i {
+    color: var(--accent);
+}
+
+.nav-link {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #424245 !important;
+    transition: color 0.2s var(--ease-apple);
+}
+
+.nav-link:hover {
+    color: var(--accent) !important;
+    background: transparent !important;
+}
+
+.nav-link.active {
+    color: #1D1D1F !important;
+    font-weight: 600;
+    background: transparent !important;
+}
+
+/* ==========================================
+   APPLE CARDS ("Bento" Style)
+   ========================================== */
+.metric,
+.application-card,
+.analytics-card,
+.chart-container,
+.insight-card,
+.pricing-card,
+.search-filter-bar,
+.modal-content,
+.coming-soon-container,
+.board-column {
+    background: #FFFFFF !important;
+    border-radius: var(--radius-lg) !important;
+    border: none !important; /* No borders, just shadows */
+    box-shadow: var(--shadow-1);
+    transition: transform 0.4s var(--ease-spring), box-shadow 0.4s var(--ease-spring);
+}
+
+/* Hover Physics */
+.application-card:hover,
+.analytics-card:hover,
+.pricing-card:hover {
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: var(--shadow-3);
+    z-index: 10;
+}
+
+/* Metrics - Big & Bold */
+.metric h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #1D1D1F;
+    margin-bottom: 0;
+}
+
+.metric p {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #86868B;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-top: 0.25rem;
+}
+
+/* Board Columns */
+.board-column {
+    background: #F5F5F7 !important; /* Slightly darker than cards */
+    box-shadow: none !important;
+    padding: 1rem;
+}
+
+.board-column h3 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #86868B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+}
+
+/* Application Card Internal */
+.application-card {
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    cursor: grab;
+}
+
+.application-card h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.application-card p {
+    font-size: 0.85rem;
+    color: #86868B;
+}
+
+.stage {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px; /* Pill shape */
+}
+
+/* ==========================================
+   BUTTONS - iOS Style
+   ========================================== */
+.btn {
+    border-radius: 100px !important; /* Pill shape */
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.4rem;
+    transition: all 0.2s var(--ease-apple);
+    letter-spacing: -0.01em;
+}
+
+.btn.primary {
+    background: #0071E3 !important; /* Apple Blue */
+    color: white;
+    border: none;
+    box-shadow: none;
+}
+
+.btn.primary:hover {
+    background: #0077ED !important;
+    transform: scale(1.02);
+}
+
+.btn.primary:active {
+    transform: scale(0.98);
+}
+
+.btn.secondary {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: #0071E3 !important;
+    border: none !important;
+}
+
+.btn.secondary:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================
+   INPUTS - Clean & Minimal
+   ========================================== */
+.form-group input,
+.form-group select,
+.form-group textarea,
+.search-box input,
+.filter-group select {
+    background: #F5F5F7 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    color: #1D1D1F !important;
+    transition: background 0.2s;
+}
+
+.form-group input:focus, 
+.search-box input:focus {
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15); /* Focus Ring */
+    outline: none;
+}
+
+/* ==========================================
+   MODALS - Sheet Style
+   ========================================== */
+.modal {
+    background: rgba(50, 50, 50, 0.4) !important;
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    box-shadow: var(--shadow-depth);
+    border-radius: 20px !important;
+}
+
+/* ==========================================
+   FLOATING ACTION BUTTON
+   ========================================== */
+.fab {
+    background: #1D1D1F; /* Black on light mode */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 64px;
+    height: 64px;
+    transition: transform 0.4s var(--ease-spring);
+}
+
+.fab:hover {
+    transform: scale(1.1) rotate(90deg);
+    background: #0071E3;
+}
+
+/* ==========================================
+   ANIMATED BACKGROUND (Subtle Mesh)
+   ========================================== */
+.animated-bg {
+    display: none; /* Apple style prefers clean backgrounds */
+}
+
+/* ==========================================
+   DARK MODE - "Pro" Appearance
+   ========================================== */
+body.dark-mode {
+    background: #000000;
+    color: #F5F5F7;
+}
+
+body.dark-mode .navbar {
+    background: rgba(29, 29, 31, 0.72) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .metric,
+body.dark-mode .application-card,
+body.dark-mode .analytics-card,
+body.dark-mode .chart-container,
+body.dark-mode .pricing-card,
+body.dark-mode .search-filter-bar,
+body.dark-mode .modal-content,
+body.dark-mode .coming-soon-container,
+body.dark-mode .usage-indicator {
+    background: #1C1C1E !important; /* iOS Dark Mode Card */
+    box-shadow: none;
+}
+
+body.dark-mode .board-column {
+    background: #000000 !important;
+}
+
+body.dark-mode .nav-brand,
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4 {
+    color: #F5F5F7 !important;
+}
+
+body.dark-mode .nav-link {
+    color: #86868B !important;
+}
+
+body.dark-mode .nav-link.active {
+    color: #FFFFFF !important;
+}
+
+body.dark-mode .application-card p {
+    color: #86868B;
+}
+
+body.dark-mode .btn.secondary {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #2997FF !important; /* Lighter blue for dark mode */
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .search-box input {
+    background: #2C2C2E !important;
+    color: white !important;
+}
+
+body.dark-mode .fab {
+    background: #2997FF;
+}
+
+/* ==========================================
+   TOASTS - Pill Style
+   ========================================== */
+.toast {
+    border-radius: 100px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-3);
+    border: none;
+    color: #1D1D1F;
+    font-weight: 500;
+    padding: 12px 24px;
+}
+
+body.dark-mode .toast {
+    background: rgba(44, 44, 46, 0.9) !important;
+    color: white;
+}

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Job Tracker - Stop Losing Track of Your Job Applications</title>
+    <meta name="description" content="The simple, powerful way to organize your job search. Track applications, monitor progress, and land your dream job faster.">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="Smart Job Tracker - Organize Your Job Search">
+    <meta property="og:description" content="Track all your job applications in one place. Free to start.">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Apple-Style Reset & Typography */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        :root {
+            --apple-blue: #0071E3;
+            --apple-dark-blue: #0077ED;
+            --apple-bg: #F5F5F7;
+            --apple-text: #1D1D1F;
+            --apple-gray: #86868B;
+            --radius: 20px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--apple-text);
+            line-height: 1.47;
+            background: #FFFFFF;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation - Frosted Glass */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            padding: 0.8rem 0;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--apple-text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+        
+        .logo i {
+            color: var(--apple-blue);
+        }
+        
+        .nav-links a {
+            font-size: 0.8rem;
+            color: #424245;
+            text-decoration: none;
+            margin-left: 24px;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--apple-blue);
+        }
+        
+        .nav-cta {
+            background: var(--apple-blue);
+            color: white !important;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+        
+        .nav-cta:hover {
+            background: var(--apple-dark-blue);
+        }
+        
+        /* Hero Section - The "Apple" Look */
+        .hero {
+            padding: 8rem 2rem 6rem;
+            background: #FFFFFF;
+            text-align: center;
+        }
+        
+        .hero-container {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .hero-content h1 {
+            font-size: 4rem; /* Big Typography */
+            font-weight: 700;
+            line-height: 1.05;
+            color: #1D1D1F;
+            margin-bottom: 1rem;
+            letter-spacing: -0.03em;
+        }
+        
+        .hero-content h1 span {
+            color: var(--apple-blue);
+            /* Gradient Text Effect */
+            background: linear-gradient(135deg, #0071E3, #00C7BE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.5rem;
+            color: #86868B;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--apple-blue);
+            color: white;
+            padding: 12px 26px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .hero-cta:hover {
+            background: var(--apple-dark-blue);
+            transform: scale(1.03);
+        }
+        
+        .hero-subtitle {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #86868B;
+        }
+        
+        /* The Product Shot - "iPad Style" */
+        .hero-image {
+            width: 100%;
+            max-width: 1000px;
+            background: transparent;
+            border-radius: 24px;
+            padding: 0;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
+            margin-top: 2rem;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .hero-mockup {
+            background: #F5F5F7;
+            padding: 2rem;
+        }
+        
+        .mockup-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #D1D1D6;
+        }
+        
+        .mockup-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .mockup-column {
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+        }
+        
+        .mockup-column-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #86868B;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .mockup-card {
+            background: white;
+            border-radius: 14px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .mockup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mockup-card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1D1D1F;
+            margin-bottom: 4px;
+        }
+        
+        .mockup-card-sub {
+            font-size: 0.8rem;
+            color: #86868B;
+        }
+        
+        /* Stats - Minimal */
+        .social-proof {
+            background: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 6rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1D1D1F, #424245);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #86868B;
+            font-weight: 500;
+        }
+        
+        /* Grid Layouts - "Bento Box" */
+        .section-container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+        
+        .features, .steps, .testimonial-grid, .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 3rem;
+        }
+        
+        .feature, .testimonial, .pricing-card {
+            background: #F5F5F7; /* Apple Gray BG */
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: none;
+            border: none;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .feature:hover, .testimonial:hover {
+            background: #EDEDF0;
+            transform: scale(1.02);
+            box-shadow: none;
+        }
+        
+        .feature h3, .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            color: #1D1D1F;
+        }
+        
+        .feature p {
+            font-size: 1rem;
+            color: #6E6E73;
+            line-height: 1.5;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feature-icon i {
+            color: var(--apple-blue);
+            font-size: 1.25rem;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            color: #86868B;
+        }
+        
+        /* Pricing Cards */
+        .pricing-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .pricing-card.featured {
+            background: #1D1D1F; /* Dark Mode Card for Pro */
+            border: none;
+            color: white;
+        }
+        
+        .pricing-card.featured h3, 
+        .pricing-card.featured .price, 
+        .pricing-card.featured ul li {
+            color: white;
+        }
+        
+        .pricing-card.featured .price span {
+            color: #86868B;
+        }
+        
+        .pricing-card.featured .pricing-cta {
+            background: white;
+            color: #1D1D1F;
+        }
+        
+        .pricing-card.featured .pricing-cta:hover {
+            background: #F5F5F7;
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            background: linear-gradient(135deg, #0071E3, #00C7BE);
+            top: 20px;
+            right: 20px;
+            left: auto;
+            transform: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1D1D1F;
+            margin: 1rem 0;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: #86868B;
+            font-weight: 400;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: #424245;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pricing-features li i {
+            color: var(--apple-blue);
+        }
+        
+        .pricing-cta {
+            display: block;
+            padding: 12px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 500;
+            background: #F5F5F7;
+            color: var(--apple-blue);
+            transition: background 0.2s;
+        }
+        
+        .pricing-cta:hover {
+            background: #E5E5EA;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: #F5F5F7;
+            color: #1D1D1F;
+            padding: 8rem 2rem;
+            text-align: center;
+        }
+        
+        .final-cta h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+        
+        .final-cta p {
+            color: #86868B;
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .final-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #0071E3;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        
+        .final-cta-btn:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            color: #86868B;
+            font-size: 0.9rem;
+        }
+        
+        /* Testimonials */
+        .testimonial-author {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: #D1D1D6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .testimonial-stars {
+            color: #FF9500; /* Apple Yellow/Orange */
+            margin-bottom: 1rem;
+        }
+        
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+        }
+        
+        .footer {
+            background: #F5F5F7;
+            padding: 2rem;
+            text-align: center;
+            color: #86868B;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-container { display: block; }
+            .hero-image { margin-top: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+            .nav-links a:not(.nav-cta) { display: none; }
+            
+            .features, .steps, .testimonial-grid, .pricing-grid, .mockup-board, .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                gap: 2rem;
+            }
+            
+            .mockup-board {
+                grid-template-columns: 1fr 1fr; /* 2 cols on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-briefcase"></i>
+                Smart Job Tracker
+            </a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div class="nav-links" style="display: flex; align-items: center; gap: 1rem; margin-right: 1rem;">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="index.html?login=true">Login</a>
+                </div>
+                <a href="index.html?register=true" class="nav-cta">Start Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Stop Losing Track of Your <span>Job Applications.</span></h1>
+                <p>The simple, powerful way to organize your job search. Track applications, monitor progress, and land your dream job faster.</p>
+                <a href="index.html?register=true" class="hero-cta">
+                    Start Tracking Free <i class="fas fa-arrow-right"></i>
+                </a>
+                <p class="hero-subtitle">No credit card required • Set up in 2 minutes</p>
+            </div>
+            <div class="hero-image">
+                <div class="hero-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                    </div>
+                    <div class="mockup-board">
+                        <div class="mockup-column">
+                            <div class="mockup-column-title">Applied</div>
+                            <div class="mockup-card">
+                                <div class="mockup-card-title">Google</div>
+                                <div class="mockup-card-sub">Software Engineer</div>
+                            </div>
+                            <div class="mockup-card">
+                                <div class="mockup-card-title">Stripe</div>
+                                <div class="mockup-card-sub">Product Manager</div>
+                            </div>
+                        </div>
+                        <div class="mockup-column">
+                            <div class="mockup-column-title">Interview</div>
+                            <div class="mockup-card">
+                                <div class="mockup-card-title">Airbnb</div>
+                                <div class="mockup-card-sub">UX Designer</div>
+                            </div>
+                        </div>
+                        <div class="mockup-column">
+                            <div class="mockup-column-title">Offer</div>
+                            <div class="mockup-card">
+                                <div class="mockup-card-title">Netflix</div>
+                                <div class="mockup-card-sub">Data Analyst</div>
+                            </div>
+                        </div>
+                        <div class="mockup-column">
+                            <div class="mockup-column-title">Rejected</div>
+                            <div class="mockup-card">
+                                <div class="mockup-card-title">Meta</div>
+                                <div class="mockup-card-sub">Engineer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Applications Tracked</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">12K+</div>
+                <div class="stat-label">Offers Landed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">4.9/5</div>
+                <div class="stat-label">User Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Your Job Search Command Center.</h2>
+                <p>Everything you need to stay organized, focused, and in control.</p>
+            </div>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-columns"></i></div>
+                    <h3>Visual Kanban Board</h3>
+                    <p>See every application at a glance. Drag and drop as you move through stages.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Smart Analytics</h3>
+                    <p>Know your response rate, interview rate, and what's actually working.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                    <h3>Follow-up Reminders</h3>
+                    <p>Never let an opportunity slip through the cracks with timely reminders.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-download"></i></div>
+                    <h3>One-Click Export</h3>
+                    <p>Download your data anytime. Your information stays yours.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Works Everywhere</h3>
+                    <p>Access from any device — desktop, tablet, or phone.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-search"></i></div>
+                    <h3>Powerful Search</h3>
+                    <p>Find any application instantly with search and filters.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Get Organized in 3 Simple Steps.</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Add Your Applications</h3>
+                    <p>Enter the company, role, and date. Takes just 30 seconds per application.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Track Your Progress</h3>
+                    <p>Drag and drop as you move through stages — interview scheduled? Just drag it.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Land Your Dream Job</h3>
+                    <p>Stay organized, follow up on time, and close more offers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing.</h2>
+                <p>Start free. Upgrade when you need more.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$0<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Up to 5 applications</li>
+                        <li><i class="fas fa-check"></i> Basic analytics</li>
+                        <li><i class="fas fa-check"></i> Email support</li>
+                        <li><i class="fas fa-check"></i> All core features</li>
+                    </ul>
+                    <a href="index.html?register=true" class="pricing-cta">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <h3>Professional</h3>
+                    <div class="price">$14.99<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Unlimited applications</li>
+                        <li><i class="fas fa-check"></i> Advanced analytics</li>
+                        <li><i class="fas fa-check"></i> Follow-up reminders</li>
+                        <li><i class="fas fa-check"></i> Resume builder</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <a href="index.html?register=true" class="pricing-cta primary">Start Free Trial</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">$49.99<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check"></i> Team collaboration</li>
+                        <li><i class="fas fa-check"></i> Custom branding</li>
+                        <li><i class="fas fa-check"></i> API access</li>
+                        <li><i class="fas fa-check"></i> Dedicated manager</li>
+                    </ul>
+                    <a href="mailto:sales@smartjobtracker.com" class="pricing-cta">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Your Dream Job Is Waiting.</h2>
+        <p>Don't let disorganization hold you back. Start tracking today — it's free.</p>
+        <a href="index.html?register=true" class="final-cta-btn">
+            Get Started Free <i class="fas fa-arrow-right"></i>
+        </a>
+        <div class="trust-badges">
+            <div class="trust-badge"><i class="fas fa-lock"></i> Bank-level security</div>
+            <div class="trust-badge"><i class="fas fa-mobile-alt"></i> Works on all devices</div>
+            <div class="trust-badge"><i class="fas fa-bolt"></i> Set up in 2 minutes</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Smart Job Tracker. All rights reserved.</p>
+    </footer>
+</body>
+</html>

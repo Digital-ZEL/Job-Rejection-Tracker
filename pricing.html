@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - JobTracker Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1d4ed8;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-300: #d1d5db;
+            --neutral-600: #4b5563;
+            --neutral-700: #374151;
+            --neutral-800: #1f2937;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --border-radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--neutral-50);
+            color: var(--neutral-800);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--neutral-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-blue);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #3b82f6 100%);
+            color: var(--white);
+            margin-bottom: 3rem;
+            border-radius: var(--border-radius);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--neutral-800);
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-period {
+            color: var(--neutral-600);
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: var(--neutral-600);
+        }
+
+        .plan-features li i {
+            color: var(--accent-green);
+            margin-right: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--white);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-secondary {
+            background: var(--neutral-200);
+            color: var(--neutral-700);
+            width: 100%;
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-300);
+        }
+
+        .trial-badge {
+            background: var(--accent-green);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            position: absolute;
+            top: -0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .features-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-description {
+            color: var(--neutral-600);
+        }
+
+        .faq-section {
+            margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--neutral-800);
+        }
+
+        .faq-answer {
+            color: var(--neutral-600);
+        }
+
+        .footer-cta {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--neutral-100);
+            border-radius: var(--border-radius);
+        }
+
+        @media (max-width: 768px) {
+            .pricing-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="professional-landing.html" class="logo">JobTracker Pro</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Applications</a>
+                <a href="resume-builder.html" class="nav-link">Resume Builder</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="hero-title">Choose Your Plan</h1>
+            <p class="hero-subtitle">Simple, transparent pricing. Start your 14-day free trial. No credit card required. Cancel anytime.</p>
+        </div>
+
+        <div class="pricing-container">
+            <!-- Starter Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Starter</h3>
+                <div class="plan-price">$0</div>
+                <p class="plan-period">Forever free</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Track up to 25 applications</li>
+                    <li><i class="fas fa-check"></i> Basic resume builder</li>
+                    <li><i class="fas fa-check"></i> Essential analytics dashboard</li>
+                    <li><i class="fas fa-check"></i> Smart paste technology</li>
+                    <li><i class="fas fa-check"></i> Data export (JSON)</li>
+                    <li><i class="fas fa-check"></i> Email support</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="selectPlan('starter')">Get Started Free</button>
+            </div>
+
+            <!-- Professional Plan -->
+            <div class="pricing-card featured">
+                <div class="trial-badge">Most Popular</div>
+                <h3 class="plan-name">Professional</h3>
+                <div class="plan-price">$14.99</div>
+                <p class="plan-period">per month</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Unlimited applications</li>
+                    <li><i class="fas fa-check"></i> Premium resume templates</li>
+                    <li><i class="fas fa-check"></i> Advanced analytics & insights</li>
+                    <li><i class="fas fa-check"></i> AI-powered resume optimization</li>
+                    <li><i class="fas fa-check"></i> Cover letter generator</li>
+                    <li><i class="fas fa-check"></i> Interview preparation tools</li>
+                    <li><i class="fas fa-check"></i> Priority email support</li>
+                    <li><i class="fas fa-check"></i> Cloud backup & sync</li>
+                </ul>
+                <button class="btn btn-primary" onclick="startTrial()">Start 14-Day Free Trial</button>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <h3 class="plan-name">Enterprise</h3>
+                <div class="plan-price">$49.99</div>
+                <p class="plan-period">per month</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Everything in Professional</li>
+                    <li><i class="fas fa-check"></i> Team collaboration (up to 10 users)</li>
+                    <li><i class="fas fa-check"></i> Custom branding & white-label</li>
+                    <li><i class="fas fa-check"></i> REST API access</li>
+                    <li><i class="fas fa-check"></i> Advanced reporting & analytics</li>
+                    <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                    <li><i class="fas fa-check"></i> 24/7 priority support</li>
+                    <li><i class="fas fa-check"></i> Custom integrations</li>
+                    <li><i class="fas fa-check"></i> Onboarding & training</li>
+                </ul>
+                <button class="btn btn-secondary" onclick="selectPlan('enterprise')">Contact Sales</button>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h2>Why Choose JobTracker Pro?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="feature-title">AI-Powered</h3>
+                    <p class="feature-description">Get intelligent resume suggestions and job matching</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Advanced Analytics</h3>
+                    <p class="feature-description">Track your job search progress with detailed insights</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3 class="feature-title">Mobile Optimized</h3>
+                    <p class="feature-description">Access your data anywhere, anytime</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="feature-title">Secure & Private</h3>
+                    <p class="feature-description">Your data is encrypted and never shared</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h3 class="faq-question">How does the 14-day free trial work?</h3>
+                <p class="faq-answer">Sign up for the Professional plan and get full access to all premium features for 14 days. No credit card required. After 14 days, you'll be charged $14.99/month. Cancel anytime during the trial to avoid charges.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Can I cancel anytime?</h3>
+                <p class="faq-answer">Yes! You can cancel your subscription at any time from your account settings. You'll continue to have access until the end of your current billing period.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">What happens to my data if I cancel?</h3>
+                <p class="faq-answer">Your data remains yours. If you cancel, you can export all your data before your subscription ends. Free users can access basic features with some limitations.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Is my payment information secure?</h3>
+                <p class="faq-answer">Absolutely! We use industry-standard encryption and never store your credit card information on our servers. All payments are processed through secure payment providers.</p>
+            </div>
+        </div>
+
+        <div class="footer-cta">
+            <h3>Ready to supercharge your job search?</h3>
+            <p>Join thousands of professionals who trust JobTracker Pro</p>
+            <button class="btn btn-primary" onclick="startTrial()" style="max-width: 300px; margin: 1rem auto;">
+                Start Your 14-Day Free Trial
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Subscription management
+        let subscriptionStatus = localStorage.getItem('subscriptionStatus') || 'free';
+        let trialEndDate = localStorage.getItem('trialEndDate');
+
+        function startTrial() {
+            const trialStart = new Date();
+            const trialEnd = new Date(trialStart.getTime() + (14 * 24 * 60 * 60 * 1000));
+            
+            localStorage.setItem('subscriptionStatus', 'trial');
+            localStorage.setItem('trialEndDate', trialEnd.toISOString());
+            localStorage.setItem('trialStartDate', trialStart.toISOString());
+            
+            alert('🎉 14-day free trial started! You now have access to all Pro features.');
+            window.location.href = 'index.html';
+        }
+
+        function selectPlan(plan) {
+            if (plan === 'starter') {
+                localStorage.setItem('subscriptionStatus', 'starter');
+                alert('You\'ve selected the Starter plan. Start tracking your job applications now!');
+                window.location.href = 'index.html';
+            } else if (plan === 'enterprise') {
+                alert('Enterprise plan requires custom setup. Please contact sales@jobtrackerpro.com or call 1-800-JOB-TRACK');
+            }
+        }
+
+        function checkSubscriptionStatus() {
+            const status = localStorage.getItem('subscriptionStatus');
+            const trialEnd = localStorage.getItem('trialEndDate');
+            
+            if (trialEnd) {
+                const endDate = new Date(trialEnd);
+                const now = new Date();
+                
+                if (now > endDate && status === 'trial') {
+                    localStorage.setItem('subscriptionStatus', 'expired');
+                    return 'expired';
+                }
+            }
+            
+            return status;
+        }
+
+        // Check if user is on trial
+        window.addEventListener('load', function() {
+            const status = checkSubscriptionStatus();
+            if (status === 'trial') {
+                const trialEnd = new Date(localStorage.getItem('trialEndDate'));
+                const daysLeft = Math.ceil((trialEnd - new Date()) / (1000 * 60 * 60 * 24));
+                
+                if (daysLeft <= 3 && daysLeft > 0) {
+                    console.log(`Trial ends in ${daysLeft} days`);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
