@@ -9,8 +9,7 @@ COPY backend/package*.json ./backend/
 COPY package*.json ./
 
 # Install dependencies
-RUN cd backend && npm ci --only=production
-RUN npm ci --only=production || true
+RUN cd backend && npm install --omit=dev
 
 # Copy application files
 COPY . .
