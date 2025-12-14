@@ -1,3 +1,6 @@
+// API Configuration
+const API_BASE_URL = 'https://job-rejection-tracker-production.up.railway.app';
+
 // Unified Application State
 let applications = [];
 
@@ -15,6 +18,7 @@ let currentPage = 'dashboard';
 
 // User Authentication State
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+let authToken = localStorage.getItem('authToken') || null;
 const FREE_TIER_LIMIT = 5;
 
 // DOM Elements
@@ -702,6 +706,19 @@ function handleSubmit(e) {
         applications.push(application);
     }
 
+    // Sync to backend
+    const isNew = !editingId;
+    if (authToken) {
+        syncApplicationToBackend(application).then(savedApp => {
+            // Update local copy with backend ID
+            if (isNew) {
+                const index = applications.findIndex(a => a.id === application.id);
+                if (index !== -1) applications[index] = savedApp;
+            }
+            localStorage.setItem('jobApplications', JSON.stringify(applications));
+        }).catch(err => console.error('Backend sync failed:', err));
+    }
+    
     localStorage.setItem('jobApplications', JSON.stringify(applications));
     renderApplications();
     updateMetrics();
@@ -712,7 +729,7 @@ function handleSubmit(e) {
     if (wasOffer) {
         setTimeout(() => {
             createConfetti();
-            showToast('Congratulations! Offer received.', 'success');
+            showToast('Congratulations! Offer received! 🎉', 'success');
         }, 300);
     } else {
         showToast('Application saved!', 'success');
@@ -930,78 +947,325 @@ function closeAuthModal() {
     }
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     
-    // Simple authentication (in production, this would call an API)
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(u => u.email === email && u.password === password);
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing in...';
     
-    if (user) {
-        currentUser = {
-            email: user.email,
-            name: user.name,
-            plan: user.plan || 'free',
-            trialEndDate: user.trialEndDate,
-            createdAt: user.createdAt
-        };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        closeAuthModal();
-        updateAuthUI();
-        showToast('Welcome back, ' + user.name + '! 👋', 'success');
-    } else {
-        showToast('Invalid email or password. Please try again.', 'error');
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Save auth token and user info
+            authToken = data.token;
+            localStorage.setItem('authToken', authToken);
+            
+            currentUser = {
+                email: data.user.email,
+                name: data.user.name,
+                plan: data.user.plan || 'free',
+                createdAt: data.user.createdAt
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            closeAuthModal();
+            updateAuthUI();
+            showToast('Welcome back, ' + currentUser.name + '! 👋', 'success');
+            
+            // Load user's applications from backend
+            await loadApplicationsFromBackend();
+        } else {
+            showToast('Invalid email or password. Please try again.', 'error');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showToast('Network error. Please check your connection and try again.', 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In';
     }
 }
 
-function handleRegister(e) {
+async function handleRegister(e) {
     e.preventDefault();
     const name = document.getElementById('register-name').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
     
-    // Check if user already exists
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    if (users.find(u => u.email === email)) {
-        showToast('An account with this email already exists. Please login instead.', 'error');
-        showLoginForm();
-        return;
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating account...';
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, name })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Save auth token and user info
+            authToken = data.token;
+            localStorage.setItem('authToken', authToken);
+            
+            currentUser = {
+                email: data.user.email,
+                name: data.user.name,
+                plan: 'free',
+                createdAt: data.user.createdAt
+            };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            closeAuthModal();
+            updateAuthUI();
+            showToast('Welcome to Job Tracker, ' + name + '! 🎉 You can track up to 5 applications for free.', 'success');
+            
+            // Load user's applications from backend
+            await loadApplicationsFromBackend();
+        } else {
+            showToast(data.message || 'Registration failed. Please try again.', 'error');
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        showToast('Network error. Please check your connection and try again.', 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
     }
-    
-    // Create new user with free plan
-    const newUser = {
-        email: email,
-        name: name,
-        password: password, // In production, this would be hashed
-        plan: 'free',
-        createdAt: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    
-    // Log in the new user
-    currentUser = {
-        email: newUser.email,
-        name: newUser.name,
-        plan: 'free',
-        createdAt: newUser.createdAt
-    };
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    
-    closeAuthModal();
-    updateAuthUI();
-    showToast('Welcome to Job Tracker, ' + name + '! 🎉 You can track up to 5 applications for free.', 'success');
 }
 
 function handleLogout() {
     if (confirm('Are you sure you want to logout?')) {
         currentUser = null;
+        authToken = null;
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');
         updateAuthUI();
         showToast('You have been logged out. See you soon! 👋', 'info');
+    }
+}
+
+// ===== BACKEND API INTEGRATION =====
+
+async function loadApplicationsFromBackend() {
+    if (!authToken) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/applications`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            applications = data.applications || [];
+            localStorage.setItem('jobApplications', JSON.stringify(applications));
+            renderApplications();
+            updateMetrics();
+        } else if (response.status === 401) {
+            // Token expired, logout
+            handleLogout();
+            showToast('Session expired. Please login again.', 'info');
+        }
+    } catch (error) {
+        console.error('Error loading applications:', error);
+        // Fallback to localStorage - offline mode
+    }
+}
+
+async function syncApplicationToBackend(application) {
+    if (!authToken) {
+        // Not logged in - save locally only
+        return application;
+    }
+    
+    try {
+        // Determine if new or update (new IDs are timestamps)
+        const isNew = !application.id || application.id.toString().length < 15;
+        const url = isNew 
+            ? `${API_BASE_URL}/api/applications`
+            : `${API_BASE_URL}/api/applications/${application.id}`;
+        const method = isNew ? 'POST' : 'PUT';
+        
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(application)
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.application; // Return backend version with real ID
+        } else {
+            throw new Error('Backend save failed');
+        }
+    } catch (error) {
+        console.error('Backend sync error:', error);
+        // Return local version as fallback
+        return application;
+    }
+}
+
+async function deleteApplicationFromBackend(id) {
+    if (!authToken) return true;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/applications/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        return response.ok;
+    } catch (error) {
+        console.error('Backend delete error:', error);
+        return true; // Allow local delete even if backend fails
+    }
+}
+
+// Backend API Functions
+async function loadApplicationsFromBackend() {
+    if (!authToken) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/applications`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            applications = data.applications || [];
+            localStorage.setItem('jobApplications', JSON.stringify(applications));
+            renderApplications();
+            updateMetrics();
+        }
+    } catch (error) {
+        console.error('Error loading applications:', error);
+        showToast('Using offline mode. Data syncs when online.', 'info');
+    }
+}
+
+async function saveApplicationToBackend(application) {
+    if (!authToken) {
+        return saveApplicationLocally(application);
+    }
+    
+    try {
+        const isNew = !application.id || !application.id.toString().includes('-');
+        const url = isNew 
+            ? `${API_BASE_URL}/api/applications`
+            : `${API_BASE_URL}/api/applications/${application.id}`;
+        const method = isNew ? 'POST' : 'PUT';
+        
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(application)
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.application;
+        } else {
+            throw new Error('Failed to save to backend');
+        }
+    } catch (error) {
+        console.error('Error saving to backend:', error);
+        return saveApplicationLocally(application);
+    }
+}
+
+async function deleteApplicationFromBackend(id) {
+    if (!authToken) {
+        return deleteApplicationLocally(id);
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/applications/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (response.ok) {
+            return true;
+        } else {
+            throw new Error('Failed to delete from backend');
+        }
+    } catch (error) {
+        console.error('Error deleting from backend:', error);
+        return deleteApplicationLocally(id);
+    }
+}
+
+// Local storage fallback functions
+function saveApplicationLocally(application) {
+    if (!application.id) {
+        application.id = Date.now().toString();
+        applications.push(application);
+    } else {
+        const index = applications.findIndex(a => a.id === application.id);
+        if (index !== -1) {
+            applications[index] = application;
+        }
+    }
+    localStorage.setItem('jobApplications', JSON.stringify(applications));
+    return application;
+}
+
+function deleteApplicationLocally(id) {
+    applications = applications.filter(app => app.id !== id);
+    localStorage.setItem('jobApplications', JSON.stringify(applications));
+    return true;
+}
+
+// Main delete function (called from UI)
+async function deleteApplication(id) {
+    if (!confirm('Are you sure you want to delete this application?')) {
+        return;
+    }
+    
+    try {
+        // Delete from backend if authenticated
+        if (authToken) {
+            await deleteApplicationFromBackend(id);
+        }
+        
+        // Delete locally
+        applications = applications.filter(app => app.id !== id);
+        localStorage.setItem('jobApplications', JSON.stringify(applications));
+        
+        renderApplications();
+        updateMetrics();
+        showToast('Application deleted successfully.', 'success');
+    } catch (error) {
+        console.error('Error deleting application:', error);
+        showToast('Error deleting application. Please try again.', 'error');
     }
 }
 
@@ -1603,12 +1867,17 @@ function updateMetrics() {
 }
 
 // Initialize on load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     checkAuthStatus();
     initDarkMode();
     
     // Show skeleton loaders while content loads
     showSkeletonLoaders();
+    
+    // Load applications from backend if authenticated
+    if (authToken) {
+        await loadApplicationsFromBackend();
+    }
     
     setTimeout(() => {
         removeSkeletonLoaders();
