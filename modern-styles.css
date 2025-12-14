@@ -258,13 +258,31 @@ h1, h2, h3, h4, h5, h6 {
    MODALS - Sheet Style
    ========================================== */
 .modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
     background: rgba(50, 50, 50, 0.4) !important;
     backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal[style*="display: block"],
+.modal.is-open {
+    display: flex !important; /* Show as flex when opened */
 }
 
 .modal-content {
     box-shadow: var(--shadow-depth);
     border-radius: 20px !important;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 /* ==========================================

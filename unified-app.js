@@ -556,13 +556,11 @@ function loadResumeBuilder() {
 
 // Smart Paste Modal
 function showSmartPasteModal() {
-    const modal = document.getElementById('smart-paste-modal');
-    modal.style.display = 'block';
+    openModal('smart-paste-modal');
 }
 
 function closeSmartPasteModal() {
-    const modal = document.getElementById('smart-paste-modal');
-    modal.style.display = 'none';
+    closeModal('smart-paste-modal');
 }
 
 function processSmartPaste() {
@@ -657,11 +655,16 @@ function openModal(id = null) {
         form.reset();
     }
     
-    modal.style.display = 'block';
+    openModal('application-modal');
 }
 
 function closeModal() {
-    modal.style.display = 'none';
+    const modal = document.getElementById('application-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('is-open');
+    }
+    document.body.style.overflow = '';
     form.reset();
     editingId = null;
 }
@@ -922,12 +925,43 @@ function getUserPlanDisplay() {
     return '<span style="color: #f59e0b;">Free</span>';
 }
 
-function showLoginModal() {
-    const modal = document.getElementById('auth-modal');
+// ===== MODAL MANAGER =====
+// Ensures only one modal is open at a time
+
+function closeAllModals() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.style.display = 'none';
+        modal.classList.remove('is-open');
+    });
+}
+
+function openModal(modalId) {
+    closeAllModals();
+    const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'block';
-        showLoginForm();
+        modal.classList.add('is-open');
+        // Lock body scroll when modal is open
+        document.body.style.overflow = 'hidden';
     }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('is-open');
+    }
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+// ===== AUTH MODAL FUNCTIONS =====
+
+function showLoginModal() {
+    openModal('auth-modal');
+    showLoginForm();
 }
 
 function showLoginForm() {
@@ -941,10 +975,7 @@ function showRegisterForm() {
 }
 
 function closeAuthModal() {
-    const modal = document.getElementById('auth-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    closeModal('auth-modal');
 }
 
 async function handleLogin(e) {
@@ -1919,12 +1950,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     // Check for login/register params
+    // Handle URL parameters for deep linking
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('login') === 'true') {
-        showLoginModal();
+        setTimeout(() => {
+            showLoginModal();
+            // Clean up URL to remove query parameter
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }, 500);
     } else if (urlParams.get('register') === 'true') {
-        showLoginModal();
-        setTimeout(showRegisterForm, 100);
+        setTimeout(() => {
+            showLoginModal();
+            showRegisterForm();
+            // Clean up URL to remove query parameter
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }, 500);
     }
 
     // Re-init ripple effect when new buttons are added
